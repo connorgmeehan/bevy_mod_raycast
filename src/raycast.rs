@@ -117,11 +117,16 @@ pub fn ray_mesh_intersection(
         // positions for each triangle, so we'll take indices in chunks of three, where each
         // chunk of three indices are references to the three vertices of a triangle.
         for index in indices.chunks(3) {
-            let triangle_index = Some(index[0].into_usize());
+            let triangle_indices = [
+                index[0].into_usize(),
+                index[1].into_usize(),
+                index[2].into_usize()
+            ];
+
             let tri_vertex_positions = [
-                Vec3A::from(vertex_positions[index[0].into_usize()]),
-                Vec3A::from(vertex_positions[index[1].into_usize()]),
-                Vec3A::from(vertex_positions[index[2].into_usize()]),
+                Vec3A::from(vertex_positions[triangle_indices[0]]),
+                Vec3A::from(vertex_positions[triangle_indices[1]]),
+                Vec3A::from(vertex_positions[triangle_indices[2]]),
             ];
             let tri_normals = vertex_normals.map(|normals| {
                 [
@@ -152,14 +157,14 @@ pub fn ray_mesh_intersection(
                             mesh_transform.transform_point3a(tri[2]),
                         ]
                     }),
-                    triangle_index,
+                    Some(triangle_indices),
                 ));
                 min_pick_distance = i.distance();
             }
         }
     } else {
         for i in (0..vertex_positions.len()).step_by(3) {
-            let triangle_index = Some(i);
+            let triangle_indices: [usize; 3] = [i, i+1, i+2];
             let tri_vertex_positions = [
                 Vec3A::from(vertex_positions[i]),
                 Vec3A::from(vertex_positions[i + 1]),
@@ -194,7 +199,7 @@ pub fn ray_mesh_intersection(
                             mesh_transform.transform_point3a(tri[2]),
                         ]
                     }),
-                    triangle_index,
+                    Some(triangle_indices),
                 ));
                 min_pick_distance = i.distance();
             }

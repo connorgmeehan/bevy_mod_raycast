@@ -15,7 +15,7 @@ pub struct IntersectionData {
     barycentric_coord: Vec3,
     distance: f32,
     triangle: Option<[Vec3A; 3]>,
-    triangle_index: Option<usize>,
+    triangle_indices: Option<[usize; 3]>,
 }
 
 impl From<rays::PrimitiveIntersection> for IntersectionData {
@@ -26,7 +26,7 @@ impl From<rays::PrimitiveIntersection> for IntersectionData {
             distance: data.distance(),
             barycentric_coord: Vec3::ZERO,
             triangle: None,
-            triangle_index: None,
+            triangle_indices: None,
         }
     }
 }
@@ -38,7 +38,7 @@ impl IntersectionData {
         barycentric: Vec3,
         distance: f32,
         triangle: Option<[Vec3A; 3]>,
-        triangle_index: Option<usize>,
+        triangle_indices: Option<[usize; 3]>,
     ) -> Self {
         Self {
             position,
@@ -46,7 +46,7 @@ impl IntersectionData {
             barycentric_coord: barycentric,
             distance,
             triangle,
-            triangle_index,
+            triangle_indices,
         }
     }
 
@@ -82,8 +82,8 @@ impl IntersectionData {
 
     /// Get the intersection data's triangle index.
     #[must_use]
-    pub fn triangle_index(&self) -> Option<usize> {
-        self.triangle_index
+    pub fn triangle_indices(&self) -> Option<[usize; 3]> {
+        self.triangle_indices
     }
 }
 
